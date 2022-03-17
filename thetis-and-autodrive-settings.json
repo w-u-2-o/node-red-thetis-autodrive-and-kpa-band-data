@@ -1,0 +1,759 @@
+[
+    {
+        "id": "447e69ff680f3b02",
+        "type": "tab",
+        "label": "Thetis Settings",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3023637075809be6",
+        "type": "comment",
+        "z": "447e69ff680f3b02",
+        "name": "Main button definition",
+        "info": "",
+        "x": 200,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "2dbfcc98533915f3",
+        "type": "ui_ui_control",
+        "z": "447e69ff680f3b02",
+        "name": "Go to settings tab",
+        "events": "change",
+        "x": 690,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "42658ee7443fb3e4",
+        "type": "ui_button",
+        "z": "447e69ff680f3b02",
+        "name": "Go to main tab",
+        "group": "635398cba3a74363",
+        "order": 14,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "RETURN",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "arrow_back",
+        "payload": "{\"tab\":\"STATION CONTROLLER MAIN\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "3e5461be1d7f942d"
+            ]
+        ]
+    },
+    {
+        "id": "3e5461be1d7f942d",
+        "type": "ui_ui_control",
+        "z": "447e69ff680f3b02",
+        "name": "Go to main tab",
+        "events": "change",
+        "x": 680,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "745b151e7ddca4c5",
+        "type": "comment",
+        "z": "447e69ff680f3b02",
+        "name": "If no file go to settings at startup",
+        "info": "",
+        "x": 750,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7a5cf45966c869b6",
+        "type": "comment",
+        "z": "447e69ff680f3b02",
+        "name": "Read, set and write network address settings",
+        "info": "",
+        "x": 270,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "bb97e134b9c880c5",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Make correct UI control command",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"tab\":\"THETIS SETTINGS\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 780,
+        "y": 480,
+        "wires": [
+            [
+                "2dbfcc98533915f3"
+            ]
+        ]
+    },
+    {
+        "id": "b7edfa46869a6092",
+        "type": "comment",
+        "z": "447e69ff680f3b02",
+        "name": "Make sure form is populated when going to tab",
+        "info": "",
+        "x": 340,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "86062a4d6eeaea3a",
+        "type": "ui_button",
+        "z": "447e69ff680f3b02",
+        "name": "Go to Thetis settings tab",
+        "group": "17aaa8a63c2a9614",
+        "order": 5,
+        "width": 1,
+        "height": 1,
+        "passthru": false,
+        "label": "",
+        "tooltip": "Thetis & autodrive settings",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "settings",
+        "payload": "{\"tab\":\"THETIS SETTINGS\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "2dbfcc98533915f3",
+                "a11793efda3f55b9",
+                "bbb88dca5aa7e357"
+            ]
+        ]
+    },
+    {
+        "id": "23c8b1f28310b49c",
+        "type": "ui_etable",
+        "z": "447e69ff680f3b02",
+        "payload": "[{\"title\":\"IP ADDRESS\",\"field\":\"ipAddress\",\"editor\":\"input\",\"headerSort\":false,\"width\":150},{\"title\":\"PORT\",\"field\":\"port\",\"editor\":\"number\",\"headerSort\":false,\"width\":100}]",
+        "payloadType": "json",
+        "options": "{}",
+        "group": "635398cba3a74363",
+        "name": "Thetis Network Settings",
+        "order": 7,
+        "width": 7,
+        "height": 3,
+        "columns": [],
+        "outputs": 1,
+        "cts": false,
+        "x": 1050,
+        "y": 640,
+        "wires": [
+            [
+                "055b6dbd4786f648"
+            ]
+        ]
+    },
+    {
+        "id": "6f3ef7878650934a",
+        "type": "file in",
+        "z": "447e69ff680f3b02",
+        "name": "Read thetis_settings.json",
+        "filename": "C:\\node-red\\thetis_settings.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 490,
+        "y": 640,
+        "wires": [
+            [
+                "61e5c96eef74f345"
+            ]
+        ]
+    },
+    {
+        "id": "a29cf2d18312168d",
+        "type": "inject",
+        "z": "447e69ff680f3b02",
+        "name": "At startup",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "[{\"ipAddress\":\"127.0.0.1\",\"port\":\"13013\"}]",
+        "payloadType": "str",
+        "x": 240,
+        "y": 640,
+        "wires": [
+            [
+                "6f3ef7878650934a"
+            ]
+        ]
+    },
+    {
+        "id": "7058e12f05120372",
+        "type": "catch",
+        "z": "447e69ff680f3b02",
+        "name": "Catch network file read error",
+        "scope": [
+            "6f3ef7878650934a"
+        ],
+        "uncaught": false,
+        "x": 500,
+        "y": 540,
+        "wires": [
+            [
+                "61e5c96eef74f345",
+                "bb97e134b9c880c5"
+            ]
+        ]
+    },
+    {
+        "id": "a11793efda3f55b9",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Chg message",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[{\"ipAddress\":\"127.0.0.1\",\"port\":\"13013\"}]",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 540,
+        "wires": [
+            [
+                "6f3ef7878650934a"
+            ]
+        ]
+    },
+    {
+        "id": "61e5c96eef74f345",
+        "type": "json",
+        "z": "447e69ff680f3b02",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 810,
+        "y": 640,
+        "wires": [
+            [
+                "835abb88015ff669",
+                "23c8b1f28310b49c"
+            ]
+        ]
+    },
+    {
+        "id": "41204b29c605cf66",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Store global.newthetisNetworkSettings",
+        "rules": [
+            {
+                "t": "set",
+                "p": "thetisNetworkSettings",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1590,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "055b6dbd4786f648",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Store flow.thetisNetworkSettings",
+        "rules": [
+            {
+                "t": "set",
+                "p": "thetisNetworkSettings",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1190,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "40ca7c487ed960c5",
+        "type": "ui_button",
+        "z": "447e69ff680f3b02",
+        "name": "Save",
+        "group": "635398cba3a74363",
+        "order": 18,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "SAVE",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "thetisNetworkSettings",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1270,
+        "y": 800,
+        "wires": [
+            [
+                "41204b29c605cf66",
+                "8976c75ed97333e6",
+                "63bd8d715f9cdd1b",
+                "df80cec4f0f2a40e"
+            ]
+        ]
+    },
+    {
+        "id": "2f5c6a714b07103d",
+        "type": "ui_toast",
+        "z": "447e69ff680f3b02",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "raw": true,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1670,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8976c75ed97333e6",
+        "type": "template",
+        "z": "447e69ff680f3b02",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<p style=\"font-size:80%;padding:0;margin:0;\"><span style=\"color:lightblue;\">Settings saved.</span></p>",
+        "output": "str",
+        "x": 1500,
+        "y": 800,
+        "wires": [
+            [
+                "2f5c6a714b07103d"
+            ]
+        ]
+    },
+    {
+        "id": "835abb88015ff669",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Pull the object out of the array",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.0",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1190,
+        "y": 540,
+        "wires": [
+            [
+                "41204b29c605cf66",
+                "055b6dbd4786f648"
+            ]
+        ]
+    },
+    {
+        "id": "65652d6cc53ca2be",
+        "type": "file",
+        "z": "447e69ff680f3b02",
+        "name": "Write thetis_settings.json",
+        "filename": "C:\\node-red\\thetis_settings.json",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1550,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "63bd8d715f9cdd1b",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "Put the object into an array",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[msg.payload]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1560,
+        "y": 660,
+        "wires": [
+            [
+                "65652d6cc53ca2be"
+            ]
+        ]
+    },
+    {
+        "id": "0e88b50aa7a39d4f",
+        "type": "ui_text",
+        "z": "447e69ff680f3b02",
+        "group": "635398cba3a74363",
+        "order": 2,
+        "width": 9,
+        "height": 1,
+        "name": "Network Settings Label",
+        "label": "<font size=4,font color=lightblue>Thetis Network Settings",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 1050,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "4ae05624a6209221",
+        "type": "ui_text",
+        "z": "447e69ff680f3b02",
+        "group": "635398cba3a74363",
+        "order": 4,
+        "width": 9,
+        "height": 1,
+        "name": "Autodrive Settings Label",
+        "label": "<font size=4,font color=lightblue>Autodrive Settings",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 870,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "78256101f4602003",
+        "type": "ui_etable",
+        "z": "447e69ff680f3b02",
+        "payload": "[{\"title\":\"BAND\",\"field\":\"band\",\"headerSort\":false,\"width\":80},{\"title\":\"DRIVE\",\"field\":\"drive\",\"editor\":\"input\",\"headerSort\":false,\"width\":80}]",
+        "payloadType": "json",
+        "options": "{}",
+        "group": "635398cba3a74363",
+        "name": "Autodrive Settings Table",
+        "order": 9,
+        "width": 5,
+        "height": 5,
+        "columns": [],
+        "outputs": 1,
+        "cts": false,
+        "x": 870,
+        "y": 1000,
+        "wires": [
+            [
+                "5fc0d62d507b4588"
+            ]
+        ]
+    },
+    {
+        "id": "2360887e4e095c97",
+        "type": "inject",
+        "z": "447e69ff680f3b02",
+        "name": "At startup default set default drive levels if none are stored",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "[{\"band\":\"160\",\"drive\":\"100\"},{\"band\":\"80\",\"drive\":\"100\"},{\"band\":\"60\",\"drive\":\"9\"},{\"band\":\"40\",\"drive\":\"90\"},{\"band\":\"30\",\"drive\":\"100\"},{\"band\":\"20\",\"drive\":\"100\"},{\"band\":\"17\",\"drive\":\"100\"},{\"band\":\"15\",\"drive\":\"100\"},{\"band\":\"12\",\"drive\":\"100\"},{\"band\":\"10\",\"drive\":\"100\"},{\"band\":\"6\",\"drive\":\"100\"},{\"band\":\"DIG%\",\"drive\":\"35\"}]",
+        "payloadType": "json",
+        "x": 390,
+        "y": 940,
+        "wires": [
+            [
+                "bbb88dca5aa7e357"
+            ]
+        ]
+    },
+    {
+        "id": "748fc5617d08ab80",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "autoDriveTable",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1570,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1053dd7ce68e84b1",
+        "type": "file",
+        "z": "447e69ff680f3b02",
+        "name": "Write autodrive_settings.json",
+        "filename": "C:\\node-red\\autodrive_settings.json",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1560,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5fc0d62d507b4588",
+        "type": "function",
+        "z": "447e69ff680f3b02",
+        "name": "Update global.autoDriveTable on changes to table",
+        "func": "var currentAutoDriveTable = global.get(\"autoDriveTable\");\nvar updatedRow = [msg.payload];\nvar updatedAutoDriveTable = currentAutoDriveTable.map(obj => updatedRow.find(o => o.band === obj.band) || obj);\nmsg.payload = updatedAutoDriveTable;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 1000,
+        "wires": [
+            [
+                "748fc5617d08ab80"
+            ]
+        ]
+    },
+    {
+        "id": "df80cec4f0f2a40e",
+        "type": "change",
+        "z": "447e69ff680f3b02",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "autoDriveTable",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1520,
+        "y": 940,
+        "wires": [
+            [
+                "1053dd7ce68e84b1"
+            ]
+        ]
+    },
+    {
+        "id": "bbb88dca5aa7e357",
+        "type": "file in",
+        "z": "447e69ff680f3b02",
+        "name": "Read autodrive_settings.json",
+        "filename": "C:\\node-red\\autodrive_settings.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 380,
+        "y": 1000,
+        "wires": [
+            [
+                "e4ce7a0cb8c52131"
+            ]
+        ]
+    },
+    {
+        "id": "b9bac985474c1733",
+        "type": "catch",
+        "z": "447e69ff680f3b02",
+        "name": "Catch autodrive file read error",
+        "scope": [
+            "bbb88dca5aa7e357"
+        ],
+        "uncaught": false,
+        "x": 380,
+        "y": 1060,
+        "wires": [
+            [
+                "e4ce7a0cb8c52131"
+            ]
+        ]
+    },
+    {
+        "id": "e4ce7a0cb8c52131",
+        "type": "json",
+        "z": "447e69ff680f3b02",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 630,
+        "y": 1060,
+        "wires": [
+            [
+                "78256101f4602003",
+                "748fc5617d08ab80"
+            ]
+        ]
+    },
+    {
+        "id": "43deeb5c8c7f2cf1",
+        "type": "comment",
+        "z": "447e69ff680f3b02",
+        "name": "Read, set and write autodrive settings",
+        "info": "",
+        "x": 250,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "635398cba3a74363",
+        "type": "ui_group",
+        "name": "THETIS Settings",
+        "tab": "7db220f9384180a6",
+        "order": 1,
+        "disp": false,
+        "width": "30",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "17aaa8a63c2a9614",
+        "type": "ui_group",
+        "name": "Antenna Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 3,
+        "disp": false,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7db220f9384180a6",
+        "type": "ui_tab",
+        "name": "THETIS SETTINGS",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "7cfa0acacdc9425e",
+        "type": "ui_tab",
+        "name": "STATION CONTROLLER MAIN",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

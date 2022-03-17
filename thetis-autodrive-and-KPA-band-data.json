@@ -1,0 +1,965 @@
+[
+    {
+        "id": "da11acbd07748dd9",
+        "type": "tab",
+        "label": "Thetis Control, Band Output & Autodrive",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8d63e79b4e4bd578",
+        "type": "inject",
+        "z": "da11acbd07748dd9",
+        "name": "Poll radio for data",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "zzbs;zzbt;zzsw;zzrs;zzmd;zzme;",
+        "payloadType": "str",
+        "x": 270,
+        "y": 440,
+        "wires": [
+            [
+                "52040a66e6640a40"
+            ]
+        ]
+    },
+    {
+        "id": "0fb0f5614245b6dd",
+        "type": "tcp request",
+        "z": "da11acbd07748dd9",
+        "name": "Thetis",
+        "server": "",
+        "port": "",
+        "out": "sit",
+        "ret": "string",
+        "splitc": " ",
+        "newline": "",
+        "tls": "",
+        "x": 890,
+        "y": 500,
+        "wires": [
+            [
+                "f21042711cf98c26"
+            ]
+        ]
+    },
+    {
+        "id": "f21042711cf98c26",
+        "type": "switch",
+        "z": "da11acbd07748dd9",
+        "name": "Remove Null Messages",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1110,
+        "y": 500,
+        "wires": [
+            [
+                "fb1a7809787340ba"
+            ]
+        ]
+    },
+    {
+        "id": "fb1a7809787340ba",
+        "type": "split",
+        "z": "da11acbd07748dd9",
+        "name": "Split on ;",
+        "splt": ";",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": true,
+        "addname": "",
+        "x": 120,
+        "y": 600,
+        "wires": [
+            [
+                "b2d9ea4c0df531b4"
+            ]
+        ]
+    },
+    {
+        "id": "613e245b537ba03d",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "Get radio transmit band and set amp band (and account for split mode/split band/RX2 operations)",
+        "info": "",
+        "x": 370,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b2d9ea4c0df531b4",
+        "type": "switch",
+        "z": "da11acbd07748dd9",
+        "name": "Split into message streams",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "ZZBS",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ZZBT",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ZZSW",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ZZRS",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ZZMD",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ZZME",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 6,
+        "x": 340,
+        "y": 620,
+        "wires": [
+            [
+                "12318a0d5e21e8d5"
+            ],
+            [
+                "bd4312eb73c2c977"
+            ],
+            [
+                "f3ba6e55b2a99de6",
+                "e4edb22e2c1c9f75"
+            ],
+            [
+                "e4edb22e2c1c9f75"
+            ],
+            [
+                "e4edb22e2c1c9f75"
+            ],
+            [
+                "e4edb22e2c1c9f75"
+            ]
+        ]
+    },
+    {
+        "id": "bd4312eb73c2c977",
+        "type": "gate",
+        "z": "da11acbd07748dd9",
+        "name": "VFOB Gate",
+        "controlTopic": "vfoBgateControl",
+        "defaultState": "closed",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "status",
+        "persist": false,
+        "storeName": "memory",
+        "x": 1110,
+        "y": 640,
+        "wires": [
+            [
+                "4d841e08d0431ace"
+            ]
+        ]
+    },
+    {
+        "id": "12318a0d5e21e8d5",
+        "type": "gate",
+        "z": "da11acbd07748dd9",
+        "name": "VFOA Gate",
+        "controlTopic": "vfoAgateControl",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "status",
+        "persist": false,
+        "storeName": "memory",
+        "x": 1110,
+        "y": 580,
+        "wires": [
+            [
+                "4d841e08d0431ace"
+            ]
+        ]
+    },
+    {
+        "id": "8fec6c7c359c5a35",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "Select TX Band Based on VFO TX State",
+        "func": "if (msg.payload==\"ZZSW1\")   \n\n                            msg.topic=\"vfoAgateControl\",\n                            msg.payload=\"close\",\n                            node.send(msg),\n                            msg.topic=\"vfoBgateControl\",\n                            msg.payload=\"open\",\n                            node.send(msg);\n                            \n    else if (msg.payload==\"ZZSW0\")\n    \n                            msg.topic=\"vfoBgateControl\",\n                            msg.payload=\"close\",\n                            node.send(msg),\n                            msg.topic=\"vfoAgateControl\",\n                            msg.payload=\"open\",\n                            node.send(msg);\n                            \nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 740,
+        "wires": [
+            [
+                "12318a0d5e21e8d5",
+                "bd4312eb73c2c977"
+            ]
+        ]
+    },
+    {
+        "id": "f3ba6e55b2a99de6",
+        "type": "rbe",
+        "z": "da11acbd07748dd9",
+        "name": "Block unless value changes",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 760,
+        "y": 680,
+        "wires": [
+            [
+                "8fec6c7c359c5a35"
+            ]
+        ]
+    },
+    {
+        "id": "4d841e08d0431ace",
+        "type": "switch",
+        "z": "da11acbd07748dd9",
+        "name": "Filter unwanted \"close\" messages",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "close",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "close",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1380,
+        "y": 580,
+        "wires": [
+            [],
+            [
+                "72998023ef58bb48"
+            ]
+        ]
+    },
+    {
+        "id": "72998023ef58bb48",
+        "type": "string",
+        "z": "da11acbd07748dd9",
+        "name": "Strip CAT prefix",
+        "methods": [
+            {
+                "name": "delLeftMost",
+                "params": [
+                    {
+                        "type": "str",
+                        "value": "ZZBS"
+                    }
+                ]
+            },
+            {
+                "name": "delLeftMost",
+                "params": [
+                    {
+                        "type": "str",
+                        "value": "ZZBT"
+                    }
+                ]
+            }
+        ],
+        "prop": "payload",
+        "propout": "payload",
+        "object": "msg",
+        "objectout": "msg",
+        "x": 1400,
+        "y": 640,
+        "wires": [
+            [
+                "e322d8af25151656"
+            ]
+        ]
+    },
+    {
+        "id": "8edf92d6e5a99dfe",
+        "type": "change",
+        "z": "da11acbd07748dd9",
+        "name": "Encode KPA1500 Band Command",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "160",
+                "fromt": "str",
+                "to": "^BN00;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "080",
+                "fromt": "str",
+                "to": "^BN01;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "060",
+                "fromt": "str",
+                "to": "^BN02;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "040",
+                "fromt": "str",
+                "to": "^BN03;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "030",
+                "fromt": "str",
+                "to": "^BN04;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "020",
+                "fromt": "str",
+                "to": "^BN05;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "017",
+                "fromt": "str",
+                "to": "^BN06;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "015",
+                "fromt": "str",
+                "to": "^BN07;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "012",
+                "fromt": "str",
+                "to": "^BN08;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "010",
+                "fromt": "str",
+                "to": "^BN09;",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "006",
+                "fromt": "str",
+                "to": "^BN10;",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1660,
+        "y": 940,
+        "wires": [
+            [
+                "17ae956ac0cc8ce1"
+            ]
+        ]
+    },
+    {
+        "id": "e322d8af25151656",
+        "type": "switch",
+        "z": "da11acbd07748dd9",
+        "name": "Filter WWV & GEN band messages",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "888",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "999",
+                "vt": "str"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 1500,
+        "y": 700,
+        "wires": [
+            [],
+            [],
+            [
+                "02298394f3a026a0"
+            ]
+        ]
+    },
+    {
+        "id": "02298394f3a026a0",
+        "type": "rbe",
+        "z": "da11acbd07748dd9",
+        "name": "Block unless value changes",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 1580,
+        "y": 760,
+        "wires": [
+            [
+                "8edf92d6e5a99dfe",
+                "ab2a5f2c518bacb7"
+            ]
+        ]
+    },
+    {
+        "id": "6a28591803622d0d",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "Autodrive implementation (control radio drive level automatically for each band)",
+        "info": "",
+        "x": 330,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "016ffdfece6847eb",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "VFO TX State",
+        "info": "",
+        "x": 590,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "e4edb22e2c1c9f75",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "Determine if conditions exist for DIG mode cutback",
+        "func": "\n\n//process incoming messages into proper variables\n\nvar message = msg.payload;\n\n//store state of VFO TX assgnment mode message\nif (message.includes(\"ZZSW\")) zzsw = message;\n//store state of RX2 operating mode message\nif (message.includes(\"ZZME\")) zzme = message;\n//store state of RX1 operating mode message\nif (message.includes (\"ZZMD\")) zzmd = message;\n//store state of RX2 operating state (activated or not)\nif (message.includes (\"ZZRS\")) zzrs = message;\n\n//check for RX1 and RX2 DIGU or DIGL operating states\n\n//handle (skip) initial undefined condition\n\nif (typeof zzmd == 'undefined' || typeof zzme == 'undefined' || typeof zzrs == 'undefined' || typeof zzsw == 'undefined')\n        return;\n        \n//if all the variables have populated, determine RX digi states\n\n    else {\n        if (zzmd.includes(\"07\") || zzmd.includes(\"09\")) rx1digi = true\n            else rx1digi = false\n        if (zzme.includes(\"07\") || zzme.includes(\"09\")) rx2digi = true\n            else rx2digi = false;\n         \n//set default state of autodrive cutback to false\n\nvar cutback = false;\n\n//if VFOA is assigned for TX then RX2 state does not matter,\n//use rx1digi to determine cutback state\n\nif (zzsw.includes (\"ZZSW0\")) cutback = rx1digi\n\n//but if VFOB is assigned for TX then check RX2 state to determine\n//which rx digi state to use\n\n    else if (zzrs.includes (\"ZZRS0\")) cutback = rx1digi\n        else cutback = rx2digi\n        \nmsg.payload = cutback;\nmsg.topic = \"cutback\"\nnode.send(msg);\n}\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1260,
+        "wires": [
+            [
+                "444578956ac5d510"
+            ]
+        ]
+    },
+    {
+        "id": "42b01cca8e368747",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "Compute final drive level then format & send command",
+        "func": "var cutback = msg.payload.cutback;\nvar drivelevel = msg.payload.drivelevel;\n\n//get digitial cutback percentage from autodrive table and store as a multiplier (e.g. 35% cutback becomes 0.65)\n\nautoDriveTable = global.get(\"autoDriveTable\"); //get autodrive data table\nrow = autoDriveTable.find(element => element.band === \"DIG%\"); //find the matching row in the table\ncutFactor = 1-Number(row.drive)/100; //return value from that row as a multiplier\n\n//if a digi mode is set and therefore drive cutback is indicated\n//cutback drive by specified percent\n//otherwise just return the specied autodrive level\n\nif (cutback) drivelevel = Math.round(drivelevel * cutFactor);\n\n// make message formatted as a Thetis drive level command\n// prefix \"ZZPC\", leve as a string of length three with leading zeroes\n// suffix \";\"\n\nmsg.drivelevel = Number(drivelevel);\nmsg.payload = \"ZZPC\" + String(drivelevel).padStart(3,'0') + \";\";\n\n// send message to flow variable so button can send on operator command\n\nflow.set(\"driveButtonPayload\",msg.payload);\n\n//set display button parameters\n\nmsg.background=\"green\",\n//msg.label=\"<font color=white>AUTODRIVE: \"+ Number(drivelevel);\nmsg.label=\"<font color=white>RESET\";\n\n//set drive level and button states\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 1220,
+        "wires": [
+            [
+                "3bfcfe12f299a7f2",
+                "267e237c41b6c858",
+                "4458cb7e8fffad1f"
+            ]
+        ]
+    },
+    {
+        "id": "169a32dc60a315c4",
+        "type": "join",
+        "z": "da11acbd07748dd9",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 950,
+        "y": 1220,
+        "wires": [
+            [
+                "42b01cca8e368747"
+            ]
+        ]
+    },
+    {
+        "id": "444578956ac5d510",
+        "type": "rbe",
+        "z": "da11acbd07748dd9",
+        "name": "Pass only changes",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 750,
+        "y": 1260,
+        "wires": [
+            [
+                "169a32dc60a315c4"
+            ]
+        ]
+    },
+    {
+        "id": "edaef0303471b26e",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "Base drive on VFO assignment, RX2 state and cutback for DIG modes",
+        "info": "",
+        "x": 310,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "3bfcfe12f299a7f2",
+        "type": "ui_button",
+        "z": "da11acbd07748dd9",
+        "name": "Autodrive Reset Button",
+        "group": "17aaa8a63c2a9614",
+        "order": 9,
+        "width": 1,
+        "height": 1,
+        "passthru": false,
+        "label": "",
+        "tooltip": "Reset autodrive level",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "settings_backup_restore",
+        "payload": "driveButtonPayload",
+        "payloadType": "flow",
+        "topic": "",
+        "topicType": "str",
+        "x": 1650,
+        "y": 1220,
+        "wires": [
+            [
+                "52040a66e6640a40"
+            ]
+        ]
+    },
+    {
+        "id": "d079395c802bb1fd",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "Forward Thetis commands from other flows -- input ONLY, nothing returned",
+        "info": "",
+        "x": 300,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "84085f72a32be681",
+        "type": "link in",
+        "z": "da11acbd07748dd9",
+        "name": "commandToThetis",
+        "links": [
+            "bce8485996e96271",
+            "394ce45b28fbc09e"
+        ],
+        "x": 175,
+        "y": 320,
+        "wires": [
+            [
+                "52040a66e6640a40"
+            ]
+        ]
+    },
+    {
+        "id": "16604233dcd8ff55",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "commandToThetis",
+        "info": "",
+        "x": 310,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "17ae956ac0cc8ce1",
+        "type": "link out",
+        "z": "da11acbd07748dd9",
+        "name": "commandToKPA1500",
+        "mode": "link",
+        "links": [
+            "6f47b3fbd06b322a",
+            "d77872eab4ddd79e"
+        ],
+        "x": 1845,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "ac457f63376bc71c",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "commandToKPA1500",
+        "info": "",
+        "x": 1920,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "d329170031482359",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "commandToPLC",
+        "info": "",
+        "x": 1900,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "a22462127334b353",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "On \"xxad1;\" command refresh autodrive level",
+        "func": "var message = msg.payload\n\nif (message.includes(\"xxad1;\") || message.includes(\"XXAD1;\")) {\n    msg.payload = flow.get(\"driveButtonPayload\");\n    node.send(msg);\n}\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 1440,
+        "wires": [
+            [
+                "52040a66e6640a40"
+            ]
+        ]
+    },
+    {
+        "id": "52bc2c778dee86a7",
+        "type": "link in",
+        "z": "da11acbd07748dd9",
+        "name": "commandToAutoDrive",
+        "links": [
+            "40175aefc981d39b"
+        ],
+        "x": 255,
+        "y": 1440,
+        "wires": [
+            [
+                "a22462127334b353"
+            ]
+        ]
+    },
+    {
+        "id": "22ea2ab66e07867e",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "commandToAutoDrive",
+        "info": "",
+        "x": 340,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "11b720f2a98ba938",
+        "type": "comment",
+        "z": "da11acbd07748dd9",
+        "name": "Process autodrive macro command inputs",
+        "info": "",
+        "x": 220,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "52040a66e6640a40",
+        "type": "change",
+        "z": "da11acbd07748dd9",
+        "name": "Add IP & port info from settings",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "thetisNetworkSettings.ipAddress",
+                "tot": "global"
+            },
+            {
+                "t": "set",
+                "p": "port",
+                "pt": "msg",
+                "to": "thetisNetworkSettings.port",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 500,
+        "wires": [
+            [
+                "0fb0f5614245b6dd"
+            ]
+        ]
+    },
+    {
+        "id": "ab2a5f2c518bacb7",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "AutoDrive Level Lookup",
+        "func": "thetisBand = msg.payload; //get incoming band message\nthetisBand = thetisBand.replace(/^0+/, ''); //remove leading zeros\nautoDriveTable = global.get(\"autoDriveTable\"); //get autodrive data table\nrow = autoDriveTable.find(element => element.band === thetisBand); //find the matching row in the table\ndriveLevel = row.drive; //return drive level from that row\ndriveLevel = String(driveLevel).padStart(3, '0'); //pad leading zeros to three digits\nmsg.payload = driveLevel;\nmsg.topic = \"drivelevel\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1220,
+        "wires": [
+            [
+                "169a32dc60a315c4"
+            ]
+        ]
+    },
+    {
+        "id": "267e237c41b6c858",
+        "type": "ui_text",
+        "z": "da11acbd07748dd9",
+        "group": "17aaa8a63c2a9614",
+        "order": 7,
+        "width": 2,
+        "height": 1,
+        "name": "Autodrive level readout",
+        "label": "<font size=1,font color=lightblue>DRIVE:",
+        "format": "<font size=1,font color=lightblue>{{msg.drivelevel}}",
+        "layout": "row-left",
+        "className": "",
+        "x": 1640,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "4e04da2180b5478b",
+        "type": "ui_button",
+        "z": "da11acbd07748dd9",
+        "name": "Autodrive control button",
+        "group": "17aaa8a63c2a9614",
+        "order": 6,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "{{msg.label}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.background}}",
+        "className": "",
+        "icon": "",
+        "payload": "autoDriveState",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1650,
+        "y": 1300,
+        "wires": [
+            [
+                "1b59bcdc46507545",
+                "4458cb7e8fffad1f"
+            ]
+        ]
+    },
+    {
+        "id": "1b59bcdc46507545",
+        "type": "function",
+        "z": "da11acbd07748dd9",
+        "name": "Two Tone Toggle Button",
+        "func": "//toggle button with indication of state by color and label\n\n//receive button press output\n\nvar message = msg.payload\n\n//if the button action was to turn things on, then get them set to turn them off next press\n\nif (message.includes(\"open\"))\n    \n        msg.background=\"green\",\n        msg.label=\"<font color=white>AUTODRIVE: ON\",\n        msg.topic=\"autoDriveGate\",\n        //set button so next press activates monitor and two-tone\n        flow.set(\"autoDriveState\", \"close\");\n\n//if the button action was to turn things off, then get them set to turn them on next press\n        \n            else\n            \n                msg.background=\"\",\n                msg.label=\"<font color=white>AUTODRIVE: OFF\",\n                msg.topic=\"autoDriveGate\",\n                //set button so next press deactivates monitor and two tone\n                flow.set(\"autoDriveState\", \"open\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 1360,
+        "wires": [
+            [
+                "4e04da2180b5478b"
+            ]
+        ]
+    },
+    {
+        "id": "4458cb7e8fffad1f",
+        "type": "gate",
+        "z": "da11acbd07748dd9",
+        "name": "",
+        "controlTopic": "autoDriveGate",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "status",
+        "persist": false,
+        "storeName": "memory",
+        "x": 1890,
+        "y": 1180,
+        "wires": [
+            [
+                "52040a66e6640a40"
+            ]
+        ]
+    },
+    {
+        "id": "c006914edbf1d858",
+        "type": "inject",
+        "z": "da11acbd07748dd9",
+        "name": "Init to ON at start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 1630,
+        "y": 1420,
+        "wires": [
+            [
+                "1b59bcdc46507545"
+            ]
+        ]
+    },
+    {
+        "id": "17aaa8a63c2a9614",
+        "type": "ui_group",
+        "name": "Antenna Control",
+        "tab": "7cfa0acacdc9425e",
+        "order": 3,
+        "disp": false,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7cfa0acacdc9425e",
+        "type": "ui_tab",
+        "name": "STATION CONTROLLER MAIN",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
