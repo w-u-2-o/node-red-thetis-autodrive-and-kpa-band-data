@@ -2,6 +2,10 @@
 
  A Windows Node Red flow to implement autodrive and KPA amplifier band data controls
  
+ SCREENSHOTS
+
+ Screenshots can be found in the Github Wiki entry for this repository.
+ 
  AUTODRIVE
  
  "Autodrive" is a concept originally devised by the author of DDUtil, whereby the radio drive level is automatically set on a band by band basis to the a user specified level for driving an amplifier. While Thetis does remember the last set drive level per band in the band stack registers, if these are changed it's easy to lose track of where you really want them.
